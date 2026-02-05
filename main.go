@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	os.Args = []string{"sv", "--addr", "127.0.0.1:5555", "--clean", "--verbose"}
+	os.Args = []string{"sv", "--addr", "127.0.0.1:5555", "--clean", "--verbose", "--min=15", "--max=60"}
 	if err := cmd.Execute(); err != nil {
 		panic(err)
 	}
