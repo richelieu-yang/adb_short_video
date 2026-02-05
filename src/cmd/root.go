@@ -22,6 +22,10 @@ var (
 
 	// verbose 本地标识
 	verbose bool
+
+	minSec int
+
+	maxSec int
 )
 
 func init() {
@@ -34,6 +38,9 @@ func init() {
 
 	rootCmd.Flags().BoolVarP(&clean, "clean", "", false, "Clean before connecting?")
 	rootCmd.Flags().BoolVarP(&verbose, "verbose", "", false, "More console output?")
+
+	rootCmd.Flags().IntVarP(&minSec, "min", "", 30, "min duration")
+	rootCmd.Flags().IntVarP(&maxSec, "max", "", 60, "max duration")
 }
 
 func Execute() error {
@@ -44,6 +51,8 @@ func rootRun(cmd *cobra.Command, args []string) {
 	console.Infof("addr: %s", addr)
 	console.Infof("clean: %t", clean)
 	console.Infof("verbose: %t", verbose)
+	console.Infof("minSec: %d", minSec)
+	console.Infof("maxSec: %d", maxSec)
 
 	ins := adbKit.NewInstance("127.0.0.1:5555", true, true)
 	if err := ins.Initialize(); err != nil {
@@ -54,7 +63,7 @@ func rootRun(cmd *cobra.Command, args []string) {
 	for {
 		count++
 
-		sec := randomKit.Int(30, 61)
+		sec := randomKit.Int(minSec, maxSec+1)
 		d := time.Second * time.Duration(sec)
 		console.Info("Sleep starts.", zap.Int("count", count), zap.String("duration", d.String()))
 		time.Sleep(d)
